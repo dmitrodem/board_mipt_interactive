@@ -1,0 +1,30 @@
+{
+    "manifest_version": 2,
+    "name": "MIPT Board Interactive",
+    "version": "1.0",
+
+    "description": "Expands messages by pressing plus sign",
+
+
+    "content_scripts": [
+        {
+            "matches": [
+                "*://zlo.rt.mipt.cc/*",
+                "*://board.rt.mipt.cc/*"
+            ],
+            "js": ["board_mipt_interactive.js"]
+        }
+    ],
+
+    "permissions": [
+        "*://zlo.rt.mipt.cc/*",
+        "*://board.rt.mipt.cc/*"
+    ],
+
+    "browser_specific_settings": {
+        "gecko": {
+            "id": {4a03515f-4ecc-44cf-8403-9c27d94413a6},
+            "update_url": "https://demidrol.pw/updates.json"
+        }
+    }
+}
