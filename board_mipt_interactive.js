@@ -1,6 +1,7 @@
 'use strict';
 
-function my_content(index) {
+function click_callback(ev) {
+    let index = ev.target['id'].slice(1);
     let container = document.querySelector('div[id*=d' + index + ']');
     let content = container.querySelector('div[id*=q' + index + ']');
     if (content) {
@@ -28,10 +29,6 @@ function my_content(index) {
         xhr.responseType = 'document';
         xhr.send(null);
     }
-}
-function click_callback(ev) {
-    let index = ev.target['id'].slice(1);
-    my_content(index);
 }
 function has_body(content) {
     return (content.innerHTML.search('\\(-\\)') == -1);

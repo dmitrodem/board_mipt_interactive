@@ -5,7 +5,6 @@
 
     "description": "Expands messages by pressing plus sign",
 
-
     "content_scripts": [
         {
             "matches": [
@@ -19,12 +18,6 @@
     "permissions": [
         "*://zlo.rt.mipt.cc/*",
         "*://board.rt.mipt.cc/*"
-    ],
+    ]
 
-    "browser_specific_settings": {
-        "gecko": {
-            "id": "board_mipt_interactive@demidrol.pw",
-            "update_url": "https://demidrol.pw/updates.json"
-        }
-    }
 }
