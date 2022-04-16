@@ -34,12 +34,7 @@ function click_callback(ev) {
     my_content(index);
 }
 function has_body(content) {
-    let result = content.innerHTML.search('\\(-\\)');
-    if (result != - 1) {
-        return false;
-    } else {
-        return true;
-    }
+    return (content.innerHTML.search('\\(-\\)') == -1);
 }
 
 function do_job() {

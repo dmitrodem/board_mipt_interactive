@@ -23,7 +23,7 @@
 
     "browser_specific_settings": {
         "gecko": {
-            "id": {4a03515f-4ecc-44cf-8403-9c27d94413a6},
+            "id": "board_mipt_interactive@demidrol.pw",
             "update_url": "https://demidrol.pw/updates.json"
         }
     }
