@@ -1,0 +1,50 @@
+@media (prefers-color-scheme: dark) {
+  body, div.g, div.w, div.an, div.info, div.menu, 
+  input, textarea, blockquote {
+    background-color: #2e3436 !important;
+    color: #babdb6 !important;
+  }
+  span.e, a[name] {
+    color: #babdb6 !important;
+  }
+  a {
+    color: #e9b96e !important;
+  }
+  .pr_from {
+    background-color: #452830 !important;
+  }
+  .pr_to {
+    background-color: #284542 !important;
+  }  
+  img {
+    background-color: white;
+    padding: 1px 1px 1px 1px;
+  }
+  div.custom {
+      border: 1px dotted white;
+  }
+}
+
+body, div.g, div.w, div.an, div.info, div.menu, 
+input, textarea, blockquote {
+    font-family: "monospace";
+}
+
+.inquote {
+    visibility: hidden !important;
+}
+div.custom {
+    max-width: 80em;
+    font-size: 12pt;
+    border: 1px dotted black;
+    /* border-radius: 10px; */
+    margin: 0.5em 0em 1em 2em;
+    padding: 0.5em 1em 0.5em 1em !important;
+}
+div.custom a{
+    font-size: 12pt;
+}
+
+div.custom img {
+    max-width: 90%;
+}

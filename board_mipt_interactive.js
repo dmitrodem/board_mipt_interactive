@@ -35,6 +35,12 @@ function has_body(content) {
 }
 
 function do_job() {
+    let css = document.createElement("link");
+    css.setAttribute("rel", "stylesheet");
+    css.setAttribute("type", "text/css");
+    css.setAttribute("href", browser.runtime.getURL("dark.css"));
+    document.querySelector("head").appendChild(css);
+    
     let links = document.querySelectorAll('span[id*="m"]');
     for (let i = 0; i < links.length; i++) {
         let link = links[i];
@@ -59,3 +65,5 @@ function do_job() {
     }
 }
 do_job();
+console.log(">>>>>");
+console.log(browser.runtime.getURL("dark.css"));
