@@ -20,7 +20,7 @@ function click_callback(ev) {
         content.style.display = 'block';
         container.insertBefore(content, container.firstChild);
         let url = window.location.origin + '/index-tmp.cgi?xmlread=' + index;
-        let xhr = new XMLHttpRequest()        
+        let xhr = new XMLHttpRequest()
         xhr.onload = function () {
             let msg = this.responseXML.querySelector('mes_body').textContent;
             content.innerHTML = msg;
@@ -34,16 +34,8 @@ function has_body(content) {
     return (content.innerHTML.search('\\(-\\)') == -1);
 }
 
-function do_job() {
-    let css = document.createElement("link");
-    css.setAttribute("rel", "stylesheet");
-    css.setAttribute("type", "text/css");
-    css.setAttribute("href", browser.runtime.getURL("dark.css"));
-    document.querySelector("head").appendChild(css);
-    
-    let links = document.querySelectorAll('span[id*="m"]');
-    for (let i = 0; i < links.length; i++) {
-        let link = links[i];
+function handle_plus(doc) {
+    doc.querySelectorAll('span[id*="m"]').forEach(function(link) {
         let link_id = link['id'].slice(1);
         let plus_span = link.querySelector('span.e');
         if (plus_span) {
@@ -62,8 +54,40 @@ function do_job() {
         } else {
             plus_span.textContent = ' . ';
         }
-    }
+    })
+}
+
+function handle_rolls(doc) {
+    doc.querySelectorAll('span.roll1').forEach(function(node) {
+        let link_id = node.parentNode['id'].slice(1);
+        node.style.cursor = 'pointer';
+        node.onclick = function(e) {
+            let reader = new FileReader();
+            reader.onloadend = function(e) {
+                let parser = new DOMParser();
+                let doc = parser.parseFromString(reader.result, "text/html");
+                handle_plus(doc);
+                let block = doc.querySelector('div.w, div.g');
+                let old_block = node.parentNode.parentNode;
+                block.setAttribute('class', old_block.getAttribute('class'));
+                old_block.parentNode.insertBefore(block, old_block);
+                old_block.remove();
+            }
+            fetch(window.location.origin + '/index-tmp.cgi?read=' + link_id)
+                .then(response => response.blob())
+                .then(blob => reader.readAsText(blob, "windows-1251"));
+        }
+    })
+}
+
+function do_job() {
+    let css = document.createElement("link");
+    css.setAttribute("rel", "stylesheet");
+    css.setAttribute("type", "text/css");
+    css.setAttribute("href", browser.runtime.getURL("dark.css"));
+    document.querySelector("head").appendChild(css);
+
+    handle_plus(document);
+    handle_rolls(document);
 }
 do_job();
-console.log(">>>>>");
-console.log(browser.runtime.getURL("dark.css"));
