@@ -19,15 +19,16 @@ function click_callback(ev) {
         content.setAttribute('id', 'q' + String(index));
         content.style.display = 'block';
         container.insertBefore(content, container.firstChild);
-        let url = window.location.origin + '/index-tmp.cgi?xmlread=' + index;
-        let xhr = new XMLHttpRequest()
-        xhr.onload = function () {
-            let msg = this.responseXML.querySelector('mes_body').textContent;
-            content.innerHTML = msg;
+
+        let reader = new FileReader();
+        reader.onloadend = function(e) {
+            let parser = new DOMParser();
+            let xdoc = parser.parseFromString(reader.result, "text/xml");
+            content.innerHTML = xdoc.querySelector('mes_body').textContent;
         }
-        xhr.open('GET', url, true);
-        xhr.responseType = 'document';
-        xhr.send(null);
+        fetch(window.location.origin + '/index-tmp.cgi?xmlread=' + index)
+            .then(response => response.blob())
+            .then(blob => reader.readAsText(blob, "windows-1251"));
     }
 }
 function has_body(content) {
@@ -58,25 +59,27 @@ function handle_plus(doc) {
 }
 
 function handle_rolls(doc) {
-    doc.querySelectorAll('span.roll1').forEach(function(node) {
-        let link_id = node.parentNode['id'].slice(1);
-        node.style.cursor = 'pointer';
-        node.onclick = function(e) {
-            let reader = new FileReader();
-            reader.onloadend = function(e) {
-                let parser = new DOMParser();
-                let doc = parser.parseFromString(reader.result, "text/html");
-                handle_plus(doc);
-                let block = doc.querySelector('div.w, div.g');
-                let old_block = node.parentNode.parentNode;
-                block.setAttribute('class', old_block.getAttribute('class'));
-                old_block.parentNode.insertBefore(block, old_block);
-                old_block.remove();
+    doc.querySelectorAll('div.w, div.g').forEach(function(container) {
+        container.querySelectorAll('span.roll1').forEach(function(node) {
+            let link_id = container.childNodes[0]['id'].slice(1);
+            node.style.cursor = 'pointer';
+            node.onclick = function(e) {
+                let reader = new FileReader();
+                reader.onloadend = function(e) {
+                    let parser = new DOMParser();
+                    let xdoc = parser.parseFromString(reader.result, "text/html");
+                    handle_plus(xdoc);
+                    let block = xdoc.querySelector('div.w, div.g');
+                    block.className = container.className;
+                    console.log(container.parentNode);
+                    container.parentNode.insertBefore(block, container);
+                    container.remove();
+                }
+                fetch(window.location.origin + '/index-tmp.cgi?read=' + link_id)
+                    .then(response => response.blob())
+                    .then(blob => reader.readAsText(blob, "windows-1251"));
             }
-            fetch(window.location.origin + '/index-tmp.cgi?read=' + link_id)
-                .then(response => response.blob())
-                .then(blob => reader.readAsText(blob, "windows-1251"));
-        }
+        })
     })
 }
 
