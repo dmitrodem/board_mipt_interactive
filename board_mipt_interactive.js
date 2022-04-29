@@ -75,7 +75,7 @@ function handle_rolls(doc) {
                     container.parentNode.insertBefore(block, container);
                     container.remove();
                 }
-                fetch(window.location.origin + '/index-tmp.cgi?read=' + link_id)
+                fetch(window.location.origin + '/index.cgi?read=' + link_id)
                     .then(response => response.blob())
                     .then(blob => reader.readAsText(blob, "windows-1251"));
             }
