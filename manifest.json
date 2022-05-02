@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "MIPT Board Interactive",
-    "version": "1.5",
+    "version": "1.6",
 
     "description": "Expands messages by pressing plus sign",
 
@@ -17,7 +17,8 @@
 
     "permissions": [
         "*://zlo.rt.mipt.cc/*",
-        "*://board.rt.mipt.cc/*"
+        "*://board.rt.mipt.cc/*",
+        "storage"
     ],
 
     "icons" : {
@@ -26,6 +27,24 @@
 
     "web_accessible_resources" : [
         "dark.css"
-    ]
+    ],
+
+    "options_ui": {
+        "page": "options.html"
+    },
+
+    "browser_action": {
+        "browser_style": true,
+        "default_popup": "options.html",
+        "default_icon": {
+            "32": "icons/favicon.ico"
+        }
+    },
+
+    "browser_specific_settings": {
+        "gecko": {
+            "id": "board_mipt_interactive@demidrol"
+        }
+    }
 
 }

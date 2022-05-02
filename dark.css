@@ -48,3 +48,7 @@ div.custom a{
 div.custom img {
     max-width: 90%;
 }
+
+.ban {
+    display: none;
+}

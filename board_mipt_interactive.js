@@ -35,6 +35,27 @@ function has_body(content) {
     return (content.innerHTML.search('\\(-\\)') == -1);
 }
 
+function confirmDialog(msg) {
+    return new Promise(function (resolve, reject) {
+        let confirmed = window.confirm(msg);
+        return confirmed ? resolve(true) : reject(false);
+    });
+}
+
+function assign_ban_class(ban_list) {
+    let ban_set = new Set(ban_list);
+    document.querySelectorAll("span.reg").forEach((spanreg) => {
+        let username = spanreg.textContent;
+        if (ban_set.has(username)) {
+            let span_message = spanreg.parentElement;
+            let div_replies = span_message.nextElementSibling;
+            span_message.classList.add("ban");
+            div_replies.classList.add("ban");
+        }
+    });
+
+}
+
 function handle_plus(doc) {
     doc.querySelectorAll('span[id*="m"]').forEach(function(link) {
         let link_id = link['id'].slice(1);
@@ -92,5 +113,33 @@ function do_job() {
 
     handle_plus(document);
     handle_rolls(document);
+    document
+        .querySelectorAll("span.reg")
+        .forEach(reg => {
+            reg.style.cursor = "pointer";
+            reg.onclick = () => {
+                let username = reg.textContent;
+                confirmDialog("Add " + username + " to ban list?")
+                    .then(
+                        () => browser.storage.sync.get("ban_list")
+                            .then(
+                                (obj) => {
+                                    let ban_list = new Set(obj.ban_list);
+                                    ban_list.add(username);
+                                    obj.ban_list = Array.from(ban_list);
+                                    console.log(obj);
+                                    browser.storage.sync.set(obj);
+                                }))
+            }
+        });
+
+    browser.storage.onChanged.addListener(
+        (changes, areaName) => {
+            if (areaName != "sync") { return; }
+            assign_ban_class(changes.ban_list.newValue);
+        });
+
+    browser.storage.sync.get("ban_list")
+        .then((obj) => assign_ban_class(obj.ban_list));
 }
 do_job();
